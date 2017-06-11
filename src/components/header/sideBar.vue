@@ -33,8 +33,8 @@ export default {
     let p = [];
     lodash.forEach(this.sides, (n, key) => {
         let tp = Object.assign({}, n, {'show': true});
-        this.ids.push(n.id);
-        this.pids.push(n.pid);
+        this.ids.push(n.id.toString());
+        this.pids.push(n.pid.toString());
         if (n.pid === ' ') {
              p.push(tp);
         }
@@ -65,22 +65,27 @@ export default {
     },
     changeHadler(index, e) {
       let i = index + 1;
-      lodash.forEach(this.cities[i], (n, key) => {
-        if (n.pid.toString() !== e.target.value.toString()) {
-             n.show = false;
-        } else {
-             n.show = true;
-        }
-      });
+      this.diguiHadler(i, [e.target.value.toString()]);
       if (lodash.includes(lodash.difference(this.ids, this.pids), e.target.value.toString())) {
-           console.log(e.target.value);
+           console.log('最终选择的是' + e.target.value);
       }
-      this.cities = Object.assign({}, this.cities);
-      console.log(lodash.difference(this.ids, this.pids)[0] === e.target.value.toString());
-      console.log(lodash.difference(this.ids, this.pids));
     },
     diguiHadler(index, ids) {
-
+      let ps = [];
+      if (index < this.cities.length) {
+        this.cities[index].forEach((n, key) => {
+        if (n.pid.toString() === ids[0]) {
+             n.show = true;
+             ps.push(n.id.toString());
+        } else {
+             n.show = false;
+        }
+       });
+      let i = index + 1;
+      this.diguiHadler(i, ps);
+    } else {
+      console.log(lodash.difference(this.ids, this.pids));
+      }
     }
   }
 };
